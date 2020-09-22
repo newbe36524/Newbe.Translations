@@ -70,7 +70,7 @@ GC 分配内存“堆”段，其中每个段是一个连续的内存范围。 �
 * 表示 ASP.NET 进程使用的内存量。
 * 包括应用的托管对象和其他内存消费对象，例如非托管内存的使用量。
 
-If the Task Manager memory value increases indefinitely and never flattens out, the app has a memory leak. The following sections demonstrate and explain several memory usage patterns.
+如果任务管理器内存值无限增加且永不会稳定，那么说明应用程序正发生内存泄漏。 以下部分将演示并说明若干内存的使用模式。
 
 ## Sample display memory usage app
 
