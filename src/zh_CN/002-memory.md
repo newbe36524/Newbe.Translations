@@ -34,33 +34,33 @@ GC 分配内存“堆”段，其中每个段是一个连续的内存范围。 �
 
 对象根据其生命周期从一个代次移动到另一代次。 随着对象的生命周期变长，它们会被移动到更高的代次中。 如前文所述，更高的代次被分析和回收的频率越低。 短生命周期对象始终保留在第 0 代中。 例如，在 Web 请求的生命周期中引用的对象是短生命周期的。 应用程序级别的 [单例对象](xref:fundamentals/dependency-injection#service-lifetimes) 通常会被迁移到第 2 代中。
 
-When an ASP.NET Core app starts, the GC:
+当 ASP.NET Core 应用程序启动时， GC将会:
 
-* Reserves some memory for the initial heap segments.
-* Commits a small portion of memory when the runtime is loaded.
+* 为初始堆段保留一些内存。
+* 在运行时加载时提交一小部分内存。
 
-The preceding memory allocations are done for performance reasons. The performance benefit comes from heap segments in contiguous memory.
+先前的内存分配是出于性能原因而考虑的。 性能将得益于连续的内存中的堆段。
 
-### Call GC.Collect
+### 调用 GC 回收
 
-Calling [GC.Collect](xref:System.GC.Collect*) explicitly:
+显式调用 [GC.Collect](xref:System.GC.Collect*)，需要考虑:
 
-* Should **not** be done by production ASP.NET Core apps.
-* Is useful when investigating memory leaks.
-* When investigating, verifies the GC has removed all dangling objects from memory so memory can be measured.
+* **不应该**在生产环境的 ASP.NET Core 应用程序中做此尝试。
+* 这对内存调查内存泄露非常有用。
+* 在调查是，可以验证 GC 已从内存中除去所有不确定对象，以便可以测量内存。
 
-## Analyzing the memory usage of an app
+## 分析应用程序的内存使用情况
 
-Dedicated tools can help analyzing memory usage:
+专用工具可帮助分析内存使用情况:
 
-- Counting object references
-- Measuring how much impact the GC has on CPU usage
-- Measuring memory space used for each generation
+- 计算对象引用
+- 测量GC对CPU使用有多大影响
+- 测量用于每个代次的内存空间
 
-Use the following tools to analyze memory usage:
+可以使用以下工具来分析内存使用情况:
 
-* [dotnet-trace](/dotnet/core/diagnostics/dotnet-trace): Can be  used on production machines.
-* [Analyze memory usage without the Visual Studio debugger](/visualstudio/profiling/memory-usage-without-debugging2)
+* [dotnet-trace](/dotnet/core/diagnostics/dotnet-trace): 这可以用于生产环境。
+* [在没有 Visual Studio 调试器时分析内存使用情况](/visualstudio/profiling/memory-usage-without-debugging2)
 * [Profile memory usage in Visual Studio](/visualstudio/profiling/memory-usage)
 
 ### Detecting memory issues
