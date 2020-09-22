@@ -1,7 +1,7 @@
 ---
-title: Memory management and patterns in ASP.NET Core
+title: ASP.NET Core 中的内存管理和常用模式
 author: rick-anderson
-description: Learn how memory is managed in ASP.NET Core and how the garbage collector (GC) works.
+description: 了解如何在 ASP.NET Core 中管理内存，了解垃圾收集器 (GC) 的工作方式。
 ms.author: riande
 ms.custom: mvc
 ms.date: 4/05/2019
@@ -19,16 +19,16 @@ no-loc:
 uid: performance/memory
 ---
 
-# Memory management and garbage collection (GC) in ASP.NET Core
+# ASP.NET Core 中的内存管理和垃圾回收 (GC)
 
-By [Sébastien Ros](https://github.com/sebastienros) and [Rick Anderson](https://twitter.com/RickAndMSFT)
+由[Sébastien Ros](https://github.com/sebastienros) 和 [Rick Anderson](https://twitter.com/RickAndMSFT) 编著
 
-Memory management is complex, even in a managed framework like .NET. Analyzing and understanding memory issues can be challenging. This article:
+内存管理非常复杂，即使在 .NET之类的托管框架中也是如此。 分析和理解内存问题可能极具挑战。 这篇文章:
 
-* Was motivated by many *memory leak* and *GC not working* issues. Most of these issues were caused by not understanding how memory consumption works in .NET Core, or not understanding how it's measured.
-* Demonstrates problematic memory use, and suggests alternative approaches.
+* 立足于很多 *内存泄露* 和 *GC 无法正常工作* 的问题. 这些问题大多是由于不了解内存在 .NET Core 中的工作方式，或者不了解它的测量方式。
+* 演示有问题的内存使用方法，并提出建议使用的其他方法。
 
-## How garbage collection (GC) works in .NET Core
+## 垃圾回收 (GC) 在 .NET Core 中的工作方式
 
 The GC allocates heap segments where each segment is a contiguous range of memory. Objects placed in the heap are categorized into one of 3 generations: 0, 1, or 2. The generation determines the frequency the GC attempts to release memory on managed objects that are no longer referenced by the app. Lower numbered generations are GC'd more frequently.
 
