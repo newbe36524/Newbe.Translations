@@ -30,9 +30,9 @@ uid: performance/memory
 
 ## 垃圾回收 (GC) 在 .NET Core 中的工作方式
 
-The GC allocates heap segments where each segment is a contiguous range of memory. Objects placed in the heap are categorized into one of 3 generations: 0, 1, or 2. The generation determines the frequency the GC attempts to release memory on managed objects that are no longer referenced by the app. Lower numbered generations are GC'd more frequently.
+GC 分配内存“堆”段，其中每个段是一个连续的内存范围。 放置在堆中的对象被分类为 3 个代次中的一个: 0 代、1 代 或者 2 代 代次将确定 GC 尝试释放内存的频率，被释放的内存是指在应用程序中不再引用的托管对象。 代次越小的代次将会被 GC 越频繁的分析并回收。
 
-Objects are moved from one generation to another based on their lifetime. As objects live longer, they are moved into a higher generation. As mentioned previously, higher generations are GC'd less often. Short term lived objects always remain in generation 0. For example, objects that are referenced during the life of a web request are short lived. Application level [singletons](xref:fundamentals/dependency-injection#service-lifetimes) generally migrate to generation 2.
+对象根据其生命周期从一个代次移动到另一代次。 随着对象的生命周期变长，它们会被移动到更高的代次中。 如前文所述，更高的代次被分析和回收的频率越低。 短生命周期对象始终保留在第 0 代中。 例如，在 Web 请求的生命周期中引用的对象是短生命周期的。 应用程序级别的 [单例对象](xref:fundamentals/dependency-injection#service-lifetimes) 通常会被迁移到第 2 代中。
 
 When an ASP.NET Core app starts, the GC:
 
