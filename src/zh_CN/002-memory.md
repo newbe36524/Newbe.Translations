@@ -61,14 +61,14 @@ GC 分配内存“堆”段，其中每个段是一个连续的内存范围。 �
 
 * [dotnet-trace](/dotnet/core/diagnostics/dotnet-trace): 这可以用于生产环境。
 * [在没有 Visual Studio 调试器时分析内存使用情况](/visualstudio/profiling/memory-usage-without-debugging2)
-* [Profile memory usage in Visual Studio](/visualstudio/profiling/memory-usage)
+* [在 Visual Studio 中的评估内存使用情况](/visualstudio/profiling/memory-usage)
 
-### Detecting memory issues
+### 检测内存问题
 
-Task Manager can be used to get an idea of how much memory an ASP.NET app is using. The Task Manager memory value:
+任务管理器可用于了解 ASP.NET 应用程序正在使用多少内存。 任务管理器中的内存值:
 
-* Represents the amount of memory that is used by the ASP.NET process.
-* Includes the app's living objects and other memory consumers such as native memory usage.
+* 表示 ASP.NET 进程使用的内存量。
+* 包括应用的托管对象和其他内存消费对象，例如非托管内存的使用量。
 
 If the Task Manager memory value increases indefinitely and never flattens out, the app has a memory leak. The following sections demonstrate and explain several memory usage patterns.
 
