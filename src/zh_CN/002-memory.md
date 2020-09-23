@@ -72,16 +72,16 @@ GC 分配内存“堆”段，其中每个段是一个连续的内存范围。 �
 
 如果任务管理器内存值无限增加且永不会稳定，那么说明应用程序正发生内存泄漏。 以下部分将演示并说明若干内存的使用模式。
 
-## Sample display memory usage app
+## 展示内存使用方式的样例应用
 
-The [MemoryLeak sample app](https://github.com/sebastienros/memoryleak) is available on GitHub. The MemoryLeak app:
+[MemoryLeak 样例应用](https://github.com/sebastienros/memoryleak) 源码公开在 GitHub 上。 该应用：
 
-* Includes a diagnostic controller that gathers real-time memory and GC data for the app.
-* Has an Index page that displays the memory and GC data. The Index page is refreshed every second.
-* Contains an API controller that provides various memory load patterns.
-* Is not a supported tool, however, it can be used to display memory usage patterns of ASP.NET Core apps.
+* 包含一个诊断信息的 controller，用于收集应用程序的实时内存和 GC 数据。
+* 包含一个用于展示内存和 GC 数据的首页。 该页面每秒会自动刷新一次。
+* 包含提供各种内存负载模式的 API controller 。
+* 虽然这不是一个长期维护的工具，不过仍然可用于演示 ASP.NET Core 应用程序的内存使用模式。
 
-Run MemoryLeak. Allocated memory slowly increases until a GC occurs. Memory increases because the tool allocates custom object to capture data. The following image shows the MemoryLeak Index page when a Gen 0 GC occurs. The chart shows 0 RPS (Requests per second) because no API endpoints from the API controller have been called.
+运行 MemoryLeak 应用时， 内存将会在 GC 发生时被回收。 Memory increases because the tool allocates custom object to capture data. The following image shows the MemoryLeak Index page when a Gen 0 GC occurs. The chart shows 0 RPS (Requests per second) because no API endpoints from the API controller have been called.
 
 ![preceding chart](memory/_static/0RPS.png)
 
