@@ -85,12 +85,12 @@ GC 分配内存“堆”段，其中每个段是一个连续的内存范围。 �
 
 ![preceding chart](memory/_static/0RPS.png)
 
-The chart displays two values for the memory usage:
+此图表显示内存使用率的两个值:
 
-- Allocated: the amount of memory occupied by managed objects
-- [Working set](/windows/win32/memory/working-set): The set of pages in the virtual address space of the process that are currently resident in physical memory. The working set shown is the same value Task Manager displays.
+- Allocated: 托管对象占用的内存量
+- [Working set](/windows/win32/memory/working-set): 当前驻留在物理内存中的进程的虚拟地址空间中的页集。 Working set 和任务管理器显示的数值是相同的。
 
-### Transient objects
+### 瞬时对象
 
 The following API creates a 10-KB String instance and returns it to the client. On each request, a new object is allocated in memory and written to the response. Strings are stored as UTF-16 characters in .NET so each character takes 2 bytes in memory.
 
