@@ -81,7 +81,7 @@ GC 分配内存“堆”段，其中每个段是一个连续的内存范围。 �
 * 包含提供各种内存负载模式的 API controller 。
 * 虽然这不是一个长期维护的工具，不过仍然可用于演示 ASP.NET Core 应用程序的内存使用模式。
 
-运行 MemoryLeak 应用时， 内存将会在 GC 发生时被回收。 Memory increases because the tool allocates custom object to capture data. The following image shows the MemoryLeak Index page when a Gen 0 GC occurs. The chart shows 0 RPS (Requests per second) because no API endpoints from the API controller have been called.
+运行 MemoryLeak 应用时， 内存将会在 GC 发生时被回收。 内存占用会随着该工具分配自定义对象时而增加。 下面的图片显示当 Gen 0 GC 发生时 MemoryLeak 首页显示的情况。 该图表显示当前有 0 个 RPS (每秒请求数 ) ，因为没有调用者调用 API controller 。
 
 ![preceding chart](memory/_static/0RPS.png)
 
