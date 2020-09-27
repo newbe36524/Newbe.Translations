@@ -92,7 +92,7 @@ GC 分配内存“堆”段，其中每个段是一个连续的内存范围。 �
 
 ### 瞬时对象
 
-The following API creates a 10-KB String instance and returns it to the client. On each request, a new object is allocated in memory and written to the response. Strings are stored as UTF-16 characters in .NET so each character takes 2 bytes in memory.
+以下 API 将创建 10-KB 字符串实例并将其返回给客户端。 每次请求时，都会有一个新对象会被分配到内存并写入响应。 字符串在 .NET 中存储为 UTF-16 字符，因此每个字符在内存中需要 2 个字节。
 
 ```csharp
 [HttpGet("bigstring")]
@@ -102,40 +102,40 @@ public ActionResult<string> GetBigString()
 }
 ```
 
-The following graph is generated with a relatively small load in to show how memory allocations are impacted by the GC.
+下图展示了在负载相对较小时，内存分配是如何受到 GC 的影响。
 
 ![preceding chart](memory/_static/bigstring.png)
 
-The preceding chart shows:
+上图显示：
 
-* 4K RPS (Requests per second).
-* Generation 0 GC collections occur about every two seconds.
-* The working set is constant at approximately 500 MB.
-* CPU is 12%.
-* The memory consumption and release (through GC) is stable.
+* 4K RPS (每秒请求数 )。
+* Gen 0 GC 收集大约每两秒钟发生一次。
+* Working set 约为 500 MB 。
+* CPU 为 12%。
+* 内存消耗和释放 (通过 GC ) 是稳定的。
 
-The following chart is taken at the max throughput that can be handled by the machine.
+以下图为采用机器最大吞吐量负载时的情况。
 
 ![preceding chart](memory/_static/bigstring2.png)
 
-The preceding chart shows:
+上图显示：
 
 * 22K RPS
-* Generation 0 GC collections occur several times per second.
-* Generation 1 collections are triggered because the app allocated significantly more memory per second.
-* The working set is constant at approximately 500 MB.
-* CPU is 33%.
-* The memory consumption and release (through GC) is stable.
-* The CPU (33%) is not over-utilized, therefore the garbage collection can keep up with a high number of allocations.
+* Gen 0 GC 收集每秒都会发生若干次。
+* Gen 1 收集将会被触发，因为应用程序每秒分配的内存大大增加。
+* Working set 约为 500 MB 。
+* CPU 为 33%。
+* 内存消耗和释放 (通过 GC ) 是稳定的。
+* CPU（33%）的使用率并没有过高，因此垃圾收集可以跟上大量的内存分配。
 
-### Workstation GC vs. Server GC
+### Workstation GC 和 Server GC
 
-The .NET Garbage Collector has two different modes:
+.NET 垃圾收集器具有两种不同的方式:
 
-* **Workstation GC**: Optimized for the desktop.
-* **Server GC**. The default GC for ASP.NET Core apps. Optimized for the server.
+* **Workstation GC**: 专为桌面系统优化。
+* **Server GC**. ASP.NET Core 应用程序的默认 GC 方式。 针对服务器环境进行优化。
 
-The GC mode can be set explicitly in the project file or in the *runtimeconfig.json* file of the published app. The following markup shows setting `ServerGarbageCollection` in the project file:
+GC 模式可以在项目文件或发布的应用程序的 *runtimeconfig.json* 文件中显式设置。 以下标记显示在项目文件中如何设置 `ServerGarbageCollection`:
 
 ```xml
 <PropertyGroup>
@@ -143,7 +143,7 @@ The GC mode can be set explicitly in the project file or in the *runtimeconfig.j
 </PropertyGroup>
 ```
 
-Changing `ServerGarbageCollection` in the project file requires the app to be rebuilt.
+在项目文件中更改 `ServerGarbageCollection` 需要重新生成应用程序。
 
 **Note:** Server garbage collection is **not** available on machines with a single core. For more information, see <xref:System.Runtime.GCSettings.IsServerGC>.
 
