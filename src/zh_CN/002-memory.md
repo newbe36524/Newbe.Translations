@@ -145,25 +145,25 @@ GC 模式可以在项目文件或发布的应用程序的 *runtimeconfig.json* �
 
 在项目文件中更改 `ServerGarbageCollection` 需要重新生成应用程序。
 
-**Note:** Server garbage collection is **not** available on machines with a single core. For more information, see <xref:System.Runtime.GCSettings.IsServerGC>.
+**注意：** Server GC **在有单个核心的机器是上不可用的**。 有关更多信息，请参阅 <xref:System.Runtime.GCSettings.IsServerGC>。
 
-The following image shows the memory profile under a 5K RPS using the Workstation GC.
+下图显示了使用 Workstation GC 在 5K RPS 下的内存概要情况。
 
 ![preceding chart](memory/_static/workstation.png)
 
-The differences between this chart and the server version are significant:
+此图表与服务器版本之间的差异很大:
 
-- The working set drops from 500 MB to 70 MB.
-- The GC does generation 0 collections multiple times per second instead of every two seconds.
-- GC drops from 300 MB to 10 MB.
+- Working set 从 500 MB 下降到 70 MB。
+- Gen 0 GC 每秒数次，而不是每两秒钟一次。
+- GC 从 300 MB 下降到 10 MB。
 
-On a typical web server environment, CPU usage is more important than memory, therefore the Server GC is better. If memory utilization is high and CPU usage is relatively low, the Workstation GC might be more performant. For example, high density hosting several web apps where memory is scarce.
+在典型的 Web 服务器环境中， CPU 使用率比内存更重要，因此 Server GC 更好。 如果内存利用率较高且 CPU 使用率相对较低，那么 Workstation GC 可能更高性能。 例如，高密度托管多个内存不足的 Web 应用程序。
 
 <a name="sc"></a>
 
-### GC using Docker and small containers
+### GC 在 Docker 和小型 container 场景中的使用
 
-When multiple containerized apps are running on one machine, Workstation GC might be more preformant than Server GC. For more information, see [Running with Server GC in a Small Container](https://devblogs.microsoft.com/dotnet/running-with-server-gc-in-a-small-container-scenario-part-0/) and [Running with Server GC in a Small Container Scenario Part 1 – Hard Limit for the GC Heap](https://devblogs.microsoft.com/dotnet/running-with-server-gc-in-a-small-container-scenario-part-1-hard-limit-for-the-gc-heap/).
+当多个容器化应用程序在一台机器上运行时，Workstation GC 可能比 Server GC 更具有优势。 有关更多信息，请参阅 [Running with Server GC in a Small Container](https://devblogs.microsoft.com/dotnet/running-with-server-gc-in-a-small-container-scenario-part-0/)和 [Running with Server GC in a Small Container Scenario Part 1 – Hard Limit for the GC Heap](https://devblogs.microsoft.com/dotnet/running-with-server-gc-in-a-small-container-scenario-part-1-hard-limit-for-the-gc-heap/)。
 
 ### Persistent object references
 
