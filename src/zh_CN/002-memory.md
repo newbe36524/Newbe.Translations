@@ -81,7 +81,7 @@ GC 分配内存“堆”段，其中每个段是一个连续的内存范围。 �
 * 包含提供各种内存负载模式的 API controller 。
 * 虽然这不是一个长期维护的工具，不过仍然可用于演示 ASP.NET Core 应用程序的内存使用模式。
 
-运行 MemoryLeak 应用时， 内存将会在 GC 发生时被回收。 内存占用会随着该工具分配自定义对象时而增加。 下面的图片显示当 Gen 0 GC 发生时 MemoryLeak 首页显示的情况。 该图表显示当前有 0 个 RPS (每秒请求数 ) ，因为没有调用者调用 API controller 。
+运行 MemoryLeak 应用时， 内存将会在 GC 发生时被回收。 内存占用会随着该工具分配自定义对象时而增加。 下面的图片显示当 0 代 GC 发生时 MemoryLeak 首页显示的情况。 该图表显示当前有 0 个 RPS (每秒请求数 ) ，因为没有调用者调用 API controller 。
 
 ![preceding chart](memory/_static/0RPS.png)
 
@@ -109,7 +109,7 @@ public ActionResult<string> GetBigString()
 上图显示：
 
 * 4K RPS (每秒请求数 )。
-* Gen 0 GC 收集大约每两秒钟发生一次。
+* 0 代 GC 收集大约每两秒钟发生一次。
 * Working set 约为 500 MB 。
 * CPU 为 12%。
 * 内存消耗和释放 (通过 GC ) 是稳定的。
@@ -165,11 +165,11 @@ GC 模式可以在项目文件或发布的应用程序的 *runtimeconfig.json* �
 
 当多个容器化应用程序在一台机器上运行时，Workstation GC 可能比 Server GC 更具有优势。 有关更多信息，请参阅 [Running with Server GC in a Small Container](https://devblogs.microsoft.com/dotnet/running-with-server-gc-in-a-small-container-scenario-part-0/)和 [Running with Server GC in a Small Container Scenario Part 1 – Hard Limit for the GC Heap](https://devblogs.microsoft.com/dotnet/running-with-server-gc-in-a-small-container-scenario-part-1-hard-limit-for-the-gc-heap/)。
 
-### Persistent object references
+### 持续性的对象引用
 
-The GC cannot free objects that are referenced. Objects that are referenced but no longer needed result in a memory leak. If the app frequently allocates objects and fails to free them after they are no longer needed, memory usage will increase over time.
+GC 不能释放被引用的对象。 对象虽然被引用但是却不被使用会导致内存泄漏。 如果应用程序频繁分配对象，且在它们用完以后（后继也不再使用）不释放的话，内存使用率会随着时间增加。
 
-The following API creates a 10-KB String instance and returns it to the client. The difference with the previous example is that this instance is referenced by a static member, which means it's never available for collection.
+下面，我们来创建一个10KB的字符串实例并将它返回给客户端。 和之前的例子不同的是，这个实例被静态成员所引用，这意味着它永远不可能被收集。
 
 ```csharp
 private static ConcurrentBag<string> _staticStrings = new ConcurrentBag<string>();
@@ -183,24 +183,24 @@ public ActionResult<string> GetStaticString()
 }
 ```
 
-The preceding code:
+上面的代码:
 
-* Is an example of a typical memory leak.
-* With frequent calls, causes app memory to increases until the process crashes with an `OutOfMemory` exception.
+* 是一个典型的内存泄漏示例。
+* 通过频繁调用，导致应用程序内存增加，最终使进程崩溃引发 `OutOfMemory` 异常
 
 ![preceding chart](memory/_static/eternal.png)
 
-In the preceding image:
+上面的图中:
 
-* Load testing the `/api/staticstring` endpoint causes a linear increase in memory.
-* The GC tries to free memory as the memory pressure grows, by calling a generation 2 collection.
-* The GC cannot free the leaked memory. Allocated and working set increase with time.
+* 压力测试时 `/api/staticstring` 会导致内存的线性增加。
+* GC在内存压力增加时，试图通过调用2代内存的回收来释放内存。
+* GC无法释放（由于错误的用法而导致）泄漏的内存， 已分配内存和工作集随着时间增加。
 
-Some scenarios, such as caching, require object references to be held until memory pressure forces them to be released. The <xref:System.WeakReference> class can be used for this type of caching code. A `WeakReference` object is collected under memory pressures. The default implementation of <xref:Microsoft.Extensions.Caching.Memory.IMemoryCache> uses `WeakReference`.
+在某些场景中（比如 缓存），需要对象持续保留，直到内存压力将它们强制释放。 <xref:System.WeakReference>类可以用于这种缓存场景。 A `WeakReference` object is collected under memory pressures. <xref:Microsoft.Extensions.Caching.Memory.IMemoryCache> 的默认实现为 `WeakReference`。
 
-### Native memory
+### 本机内存
 
-Some .NET Core objects rely on native memory. Native memory can **not** be collected by the GC. The .NET object using native memory must free it using native code.
+一些 .NET Core 对象依赖于本机内存。 GC **不能**回收本机内存。 使用本机内存的 .NET 对象必须使用本机代码将其释放。
 
 .NET provides the <xref:System.IDisposable> interface to let developers release native memory. Even if <xref:System.IDisposable.Dispose*> is not called, correctly implemented classes call `Dispose` when the [finalizer](/dotnet/csharp/programming-guide/classes-and-structs/destructors) runs.
 
