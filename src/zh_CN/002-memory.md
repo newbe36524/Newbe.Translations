@@ -47,7 +47,7 @@ GC 分配内存“堆”段，其中每个段是一个连续的内存范围。 �
 
 * **不应该**在生产环境的 ASP.NET Core 应用程序中做此尝试。
 * 这对排查内存泄露非常有用。
-* 在调查是，可以验证 GC 已从内存中除去所有不确定对象，以便可以测量内存。
+* 在调查时，可以验证 GC 已从内存中除去所有不确定对象，以便可以测量内存。
 
 ## 分析应用程序的内存使用情况
 
@@ -165,7 +165,7 @@ GC 模式可以在项目文件或发布的应用程序的 *runtimeconfig.json* �
 
 当多个容器化应用程序在一台机器上运行时，Workstation GC 可能比 Server GC 更具有优势。 有关更多信息，请参阅 [Running with Server GC in a Small Container](https://devblogs.microsoft.com/dotnet/running-with-server-gc-in-a-small-container-scenario-part-0/)和 [Running with Server GC in a Small Container Scenario Part 1 – Hard Limit for the GC Heap](https://devblogs.microsoft.com/dotnet/running-with-server-gc-in-a-small-container-scenario-part-1-hard-limit-for-the-gc-heap/)。
 
-### 持续性的对象引用
+### 持久型的对象引用
 
 GC 不能释放被引用的对象。 对象虽然被引用但是却不被使用会导致内存泄漏。 如果应用程序频繁分配对象，且在它们用完以后（后继也不再使用）不释放的话，内存使用率会随着时间增加。
 
@@ -198,9 +198,9 @@ public ActionResult<string> GetStaticString()
 
 在某些场景中（比如 缓存），需要对象持续保留，直到内存压力将它们强制释放。 <xref:System.WeakReference>类可以用于这种缓存场景。 A `WeakReference` object is collected under memory pressures. <xref:Microsoft.Extensions.Caching.Memory.IMemoryCache> 的默认实现为 `WeakReference`。
 
-### 本机内存
+### 非托管内存
 
-一些 .NET Core 对象依赖于本机内存。 GC **不能**回收本机内存。 使用本机内存的 .NET 对象必须使用本机代码将其释放。
+一些 .NET Core 对象依赖于非托管内存。 GC **不能**回收非托管内存。 使用非托管内存的 .NET 对象必须使用非托管代码将其释放。
 
 .NET provides the <xref:System.IDisposable> interface to let developers release native memory. Even if <xref:System.IDisposable.Dispose*> is not called, correctly implemented classes call `Dispose` when the [finalizer](/dotnet/csharp/programming-guide/classes-and-structs/destructors) runs.
 
